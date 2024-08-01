@@ -14,8 +14,7 @@ int main()
 
     media::video_builder builder{ "video.mp4", width, height, 12800000, fps, 12, 2 };
 
-    std::unique_ptr<uint8_t[]> buffer{ new uint8_t[width * height * 4]{ 0 } };
-
+    base::image img{ width, height };
     for (int i = 0; i < fps * 10; ++i)
     {
         for (int x = 0; x < width; ++x)
@@ -26,11 +25,13 @@ int main()
                 double b = (std::cos((x / (y + 1) + i) / 32) + 1) / 2;
                 double c = (a + b) / 2;
 
-                buffer[RED] = (uint8_t) (a * 255);
-                buffer[GREEN] = (uint8_t) (b * 255);
-                buffer[BLUE] = (uint8_t) (c * 255);
+                img[{x,y}] = base::pixel{
+                        (uint8_t) (a * 255),
+                        (uint8_t) (b * 255),
+                        (uint8_t) (c * 255)
+                };
             }
         }
-        builder.push_frame(buffer.get());
+        builder.push_frame(img);
     }
 }

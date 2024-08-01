@@ -7,10 +7,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CUDA_STANDARD 20)
 set(CMAKE_CUDA_FLAGS "-arch=sm_86")
 
-set(SRC_DIR src)
-set(INC_DIR include)
-
-include_directories(${INC_DIR})
+include_directories(include)
 
 find_package(FFMPEG REQUIRED)
 link_directories(${FFMPEG_LIBRARY_DIRS})
@@ -21,13 +18,12 @@ find_package(fmt REQUIRED)
 link_libraries(fmt::fmt)
 
 add_executable(ffmpeg_video_test
-        src/prog/encode_video.cpp
-        include/media/video_builder.hpp
-        include/media/constants.hpp
-        src/media/video_builder.cpp)
+        src/prog/encode_video.cpp)
 
 add_executable(ffmpeg_encap
         src/prog/video_builder_test.cpp
         include/media/video_builder.hpp
         include/media/constants.hpp
-        src/media/video_builder.cpp)
+        src/media/video_builder.cpp
+        include/base/image.hpp
+        src/base/image.cpp)

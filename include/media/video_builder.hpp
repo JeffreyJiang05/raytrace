@@ -4,7 +4,6 @@
 #include <exception>
 
 #include <fmt/core.h>
-
 extern "C"
 {
 #include <libavformat/avformat.h>
@@ -12,6 +11,8 @@ extern "C"
 #include <libswscale/swscale.h>
 #include <libavutil/timestamp.h>
 }
+
+#include "base/image.hpp"
 
 namespace media
 {
@@ -66,6 +67,7 @@ namespace media
         ~video_builder();
 
         void push_frame(uint8_t* rgbx_data);
+        void push_frame(const base::image& img);
     };
 
 }

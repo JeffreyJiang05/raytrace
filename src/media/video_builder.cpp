@@ -147,7 +147,7 @@ namespace media
                 av_packet_rescale_ts(builder.pkt, builder.codec_ctx->time_base, builder.stream->time_base);
                 builder.pkt->stream_index = builder.stream->index;
 
-                if constexpr (LOG_PACKETS) log_packet(builder);
+                if constexpr (LOG_PACKETS) { log_packet(builder); }
 
                 ret = av_interleaved_write_frame(builder.fmt_ctx, builder.pkt);
                 if (ret < 0) throw ffmpeg_error{ ret };
@@ -231,5 +231,9 @@ namespace media
         private_methods::send_frame_to_codec(*this);
     }
 
+    void video_builder::push_frame(const base::image& img)
+    {
+        push_frame(reinterpret_cast<uint8_t*>(img.get_buffer()));
+    }
 
 }
