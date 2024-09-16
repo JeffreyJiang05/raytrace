@@ -16,6 +16,7 @@ TEST(vector, instantiation)
     EXPECT_EQ(v2, v0.yy);
     EXPECT_NE(v2, v0.xx);
     EXPECT_EQ(v3, (vector<float, 4>{ 10.f, 2.f, 10.f, 2.f }));
+
 }
 
 TEST(vector, vec_function)

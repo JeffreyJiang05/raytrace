@@ -13,7 +13,7 @@ namespace math
     : _components{ data } {}
 
     template<typename T, std::size_t N, std::size_t X>
-    CPU_GPU T& swizzle_vector<T, N, X>::operator[](int)
+    constexpr CPU_GPU T& swizzle_vector<T, N, X>::operator[](int)
     {
         return _components.buffer[X];
     }
@@ -31,7 +31,7 @@ namespace math
     : _components{ data } {}
 
     template<typename T, std::size_t N, std::size_t X, std::size_t Y>
-    CPU_GPU T& swizzle_vector<T, N, X, Y>::operator[](int idx)
+    constexpr CPU_GPU T& swizzle_vector<T, N, X, Y>::operator[](int idx)
     {
         switch (idx)
         {
@@ -57,7 +57,7 @@ namespace math
     : _components{ data } {}
 
     template<typename T, std::size_t N, std::size_t X, std::size_t Y, std::size_t Z>
-    CPU_GPU T& swizzle_vector<T, N, X, Y, Z>::operator[](int idx)
+    constexpr CPU_GPU T& swizzle_vector<T, N, X, Y, Z>::operator[](int idx)
     {
         switch (idx)
         {
@@ -85,7 +85,7 @@ namespace math
     : _components{ data } {}
 
     template<typename T, std::size_t N, std::size_t X, std::size_t Y, std::size_t Z, std::size_t W>
-    CPU_GPU T& swizzle_vector<T, N, X, Y, Z, W>::operator[](int idx)
+    constexpr CPU_GPU T& swizzle_vector<T, N, X, Y, Z, W>::operator[](int idx)
     {
         switch (idx)
         {

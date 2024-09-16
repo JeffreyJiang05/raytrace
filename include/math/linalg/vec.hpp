@@ -97,8 +97,6 @@ namespace math
             requires Derived::value == Other::value;
             requires std::is_convertible_v<typename Other::value_type, typename Derived::value_type>;
         };
-                /*(Derived::size >= 1)*/
-                /*&& std::is_convertible_v<typename Other::value_type, typename Derived::value_type>*/
 
         template<vector_like Other>
         CPU_GPU Derived& operator+=(const Other& value) requires requires(typename Derived::value_type a, typename Other::value_type b)
@@ -153,7 +151,7 @@ namespace math
     public:
         constexpr CPU_GPU swizzle_vector(const container<value_type, N>& data);
 
-        CPU_GPU T& operator[](int idx);
+        constexpr CPU_GPU T& operator[](int idx);
         constexpr CPU_GPU T operator[](int idx) const;
     };
 
@@ -168,7 +166,7 @@ namespace math
     public:
         constexpr CPU_GPU swizzle_vector(const container<value_type, N>& data);
 
-        CPU_GPU T& operator[](int idx);
+        constexpr CPU_GPU T& operator[](int idx);
         constexpr CPU_GPU T operator[](int idx) const;
     };
 
@@ -183,7 +181,7 @@ namespace math
     public:
         constexpr CPU_GPU swizzle_vector(const container<value_type, N>& data);
 
-        CPU_GPU T& operator[](int idx);
+        constexpr CPU_GPU T& operator[](int idx);
         constexpr CPU_GPU T operator[](int idx) const;
     };
 
@@ -198,7 +196,7 @@ namespace math
     public:
         constexpr CPU_GPU swizzle_vector(const container<value_type, N>& data);
 
-        CPU_GPU T& operator[](int idx);
+        constexpr CPU_GPU T& operator[](int idx);
         constexpr CPU_GPU T operator[](int idx) const;
     };
 
@@ -335,7 +333,7 @@ namespace math
 
         constexpr CPU_GPU operator T() const; // trivially convertible to just T;
 
-        CPU_GPU T& operator[](int idx);
+        constexpr CPU_GPU T& operator[](int idx);
         constexpr CPU_GPU T operator[](int idx) const;
     };
 
@@ -389,7 +387,7 @@ namespace math
         CPU_GPU vector& operator=(const vector& cpy);
         CPU_GPU vector& operator=(vector&& mv);
 
-        CPU_GPU T& operator[](int idx);
+        constexpr CPU_GPU T& operator[](int idx);
         constexpr CPU_GPU T operator[](int idx) const;
     };
 
@@ -468,7 +466,7 @@ namespace math
         CPU_GPU vector& operator=(const vector& cpy);
         CPU_GPU vector& operator=(vector&& mv);
 
-        CPU_GPU T& operator[](int idx);
+        constexpr CPU_GPU T& operator[](int idx);
         constexpr CPU_GPU T operator[](int idx) const;
     };
 
@@ -592,7 +590,7 @@ namespace math
         CPU_GPU vector& operator=(const vector& cpy);
         CPU_GPU vector& operator=(vector&& mv);
 
-        CPU_GPU T& operator[](int idx);
+        constexpr CPU_GPU T& operator[](int idx);
         constexpr CPU_GPU T operator[](int idx) const;
     };
 
@@ -602,7 +600,10 @@ namespace math
     template<vector_like Vector, vector_like... Vectors> requires (std::conjunction_v<std::is_same<typename std::remove_cvref_t<Vector>::value_type, typename std::remove_cvref_t<Vectors>::value_type>...>)
     vector(const Vector& vec, const Vectors&... vecs) -> vector<typename std::remove_cvref_t<Vector>::value_type, (std::remove_cvref_t<Vector>::size + ... + std::remove_cvref_t<Vectors>::size)>;
 
-
+    using vec1f = vector<float, 1>;
+    using vec2f = vector<float, 2>;
+    using vec3f = vector<float, 3>;
+    using vec4f = vector<float, 4>;
 
     // for constexpr swizzling
     template<typename T, std::size_t N, std::size_t... Swizzles> requires ((Swizzles < N) && ...)

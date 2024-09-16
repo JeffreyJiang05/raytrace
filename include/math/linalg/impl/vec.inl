@@ -137,7 +137,7 @@ namespace math
     }
 
     template<typename T>
-    CPU_GPU T& vector<T, 1>::operator[](int idx)
+    constexpr CPU_GPU T& vector<T, 1>::operator[](int idx)
     {
         return data.buffer[idx];
     }
@@ -191,7 +191,7 @@ namespace math
     }
 
     template<typename T>
-    CPU_GPU T& vector<T, 2>::operator[](int idx)
+    constexpr CPU_GPU T& vector<T, 2>::operator[](int idx)
     {
         return data.buffer[idx];
     }
@@ -245,7 +245,7 @@ namespace math
     }
 
     template<typename T>
-    CPU_GPU T& vector<T, 3>::operator[](int idx)
+    constexpr CPU_GPU T& vector<T, 3>::operator[](int idx)
     {
         return data.buffer[idx];
     }
@@ -299,7 +299,7 @@ namespace math
     }
 
     template<typename T>
-    CPU_GPU T& vector<T, 4>::operator[](int idx)
+    constexpr CPU_GPU T& vector<T, 4>::operator[](int idx)
     {
         return data.buffer[idx];
     }
