@@ -5,7 +5,7 @@
 
 #include "math/floats.hpp"
 
-using namespace math::utility;
+using namespace math;
 
 TEST(float_utility, NaN_test)
 {

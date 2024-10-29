@@ -28,7 +28,6 @@ namespace math
         CPU_GPU Derived& operator/=(const Vec& vec) requires requires(typename Derived::value_type a, typename Vec::value_type b) { a /= b; };
     };
 
-
     template<typename T>
     class point<T, 1> : public point_base<point<T, 1>>
     {
@@ -52,6 +51,9 @@ namespace math
     };
 
     template<typename T>
+    point(T x) -> point<T, 1>;
+
+    template<typename T>
     class point<T, 2> : public point_base<point<T, 2>>
     {
     public:
@@ -70,6 +72,9 @@ namespace math
         constexpr CPU_GPU value_type& operator[](int N);
         constexpr CPU_GPU const value_type& operator[](int N) const;
     };
+
+    template<typename T>
+    point(T x, T y) -> point<T, 2>;
 
     template<typename T>
     class point<T, 3> : public point_base<point<T, 3>>
@@ -92,6 +97,9 @@ namespace math
     };
 
     template<typename T>
+    point(T x, T y, T z) -> point<T, 3>;
+
+    template<typename T>
     class point<T, 4> : public point_base<point<T, 4>>
     {
     public:
@@ -111,10 +119,19 @@ namespace math
         constexpr CPU_GPU const value_type& operator[](int N) const;
     };
 
+    template<typename T>
+    point(T x, T y, T z, T w) -> point<T, 4>;
+
     using point1f = point<float, 1>;
     using point2f = point<float, 2>;
     using point3f = point<float, 3>;
     using point4f = point<float, 4>;
+
+    template<std::size_t I, typename T, std::size_t N>
+    constexpr CPU_GPU auto get(point<T, N>& pt);
+
+    template<std::size_t I, typename T, std::size_t N>
+    constexpr CPU_GPU auto get(const point<T, N>& pt);
 
     template<typename T, std::size_t N, vector_like Vector>
     constexpr CPU_GPU auto operator+(const point<T, N>& pt, const Vector& vec) requires (N <= std::remove_cvref_t<Vector>::size && std::is_same_v<typename std::remove_cvref_t<Vector>::value_type, T>);
@@ -125,6 +142,18 @@ namespace math
     template<typename T, std::size_t N0, typename U, std::size_t N1>
     constexpr CPU_GPU auto operator-(const point<T, N0>& pt0, const point<U, N1>& pt1) requires (N0 == N1) && requires(T a, U b) { a - b; };
 
+    template<typename T, typename U, std::size_t N>
+    constexpr CPU_GPU auto distance(const point<T, N>& pt0, const point<U, N>& pt1);
+
+}
+
+namespace std
+{
+    template<std::size_t I, std::size_t N, typename T>
+    struct tuple_element<I, math::point<T, N>> : public std::type_identity<T> {};
+
+    template<std::size_t N, typename T>
+    struct tuple_size<math::point<T, N>> : public std::integral_constant<std::size_t, N> {};
 }
 
 #include "impl/point_base.inl"

@@ -2,7 +2,7 @@
 
 #include "gpu/gpu.hpp"
 #include "math/functions.hpp"
-#include "math/linalg/vec.hpp"
+#include "math/geometry/vec.hpp"
 #include "math/sampling.hpp"
 
 KERNEL test_vectors()

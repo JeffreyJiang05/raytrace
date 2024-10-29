@@ -1,7 +1,7 @@
 #ifndef GPU_RAYTRACE_VEC_BASE_INL
 #define GPU_RAYTRACE_VEC_BASE_INL
 
-#include "math/linalg/vec.hpp"
+#include "math/geometry/vec.hpp"
 
 namespace math
 {

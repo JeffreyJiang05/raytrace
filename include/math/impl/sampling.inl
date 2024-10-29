@@ -26,9 +26,9 @@ namespace math
     }
 
     template<std::floating_point T>
-    constexpr CPU_GPU T linear_pdf(T x, T a, T b)
+    constexpr CPU_GPU T linear_pdf(T u, T a, T b)
     {
-        if (x < 0 || x > 1) return 0;
+        if (u < 0 || u > 1) return 0;
         return 2 * std::lerp(a, b, x) / (a + b);
     }
 
@@ -36,14 +36,43 @@ namespace math
     constexpr CPU_GPU T sample_linear(T u, T a, T b)
     {
         if (u == 0 && a == 0) return 0;
-        T x = u * (a + b) / (a + std::sqrt(std::lerp(u, a * a, b * b)));
-        return std::min(x, math::one_minus_epsilon<T>);
+        T uu = u * (a + b) / (a + std::sqrt(std::lerp(u, a * a, b * b)));
+        return std::min(uu, math::one_minus_epsilon<T>);
     }
 
     template<std::floating_point T>
-    constexpr CPU_GPU T invert_sample_linear(T x, T a, T b)
+    constexpr CPU_GPU T invert_sample_linear(T u, T a, T b)
     {
-        return x * (a * (2 - x) + b * x) / (a + b);
+        return u * (a * (2 - u) + b * u) / (a + b);
+    }
+
+    template<std::floating_point T>
+    constexpr CPU_GPU point<T, 2> sample_disk(point<T, 2> u)
+    {
+        return {
+            u[0] >= 0 && u[0] < 1 ? math::sqrt(u[0]) : 0,
+            u[1] >= 0 && u[1] < 1 ? 2 * math::pi<T> * u[1] : 0
+        };
+    }
+
+    template<std::floating_point T>
+    constexpr CPU_GPU point<T, 3> sample_sphere_surface(point<T, 2> u)
+    {
+        return {
+            1,
+            u[0] >= 0 && u[0] < 1 ? 2 * math::pi<T> * u[0] : 0,
+            u[1] >= 0 && u[1] < 1 ? math::arccos(1 - 2 * u[1]) : 0
+        };
+    }
+
+    template<std::floating_point T>
+    constexpr CPU_GPU point<T, 3> sample_sphere(point<T, 3> u)
+    {
+        return {
+            u[0] >= 0 && u[1] < 1 ? math::pow(u[0], static_cast<T>(1) / 3) : 0,
+            u[1] >= 0 && u[1] < 1 ? 2 * math::pi<T> * u[1] : 0,
+            u[2] >= 0 && u[1] < 1 ? math::arccos(1 - 2 * u[2]) : 0
+        };
     }
 
 }

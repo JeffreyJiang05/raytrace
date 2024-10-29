@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <fmt/core.h>
 
 #include "math/functions.hpp"
 #include <cmath>
@@ -36,5 +37,6 @@ TEST(math_functions, maclaurin_series)
     EXPECT_NEAR(math::arcsin(0.25), asin(0.25), PRECISION);
     EXPECT_NEAR(math::arccos(0.25), acos(0.25), PRECISION);
     EXPECT_NEAR(math::arctan(0.25), atan(0.25), PRECISION);
+
 }
 

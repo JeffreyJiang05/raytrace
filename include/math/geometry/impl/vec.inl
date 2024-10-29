@@ -3,7 +3,7 @@
 
 #include <utility>
 
-#include "math/linalg/vec.hpp"
+#include "math/geometry/vec.hpp"
 
 namespace math
 {

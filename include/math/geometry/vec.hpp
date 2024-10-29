@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <concepts>
 #include <cmath>
+#include <tuple>
+#include <type_traits>
 
 #include "math/functions.hpp"
 
@@ -256,7 +258,6 @@ namespace math
     DEFINE_TAG(1, 2, 3, 0); DEFINE_TAG(1, 2, 3, 1); DEFINE_TAG(1, 2, 3, 2); DEFINE_TAG(1, 2, 3, 3);
     DEFINE_TAG(1, 3, 0, 0); DEFINE_TAG(1, 3, 0, 1); DEFINE_TAG(1, 3, 0, 2); DEFINE_TAG(1, 3, 0, 3);
     DEFINE_TAG(1, 3, 1, 0); DEFINE_TAG(1, 3, 1, 1); DEFINE_TAG(1, 3, 1, 2); DEFINE_TAG(1, 3, 1, 3);
-    DEFINE_TAG(1, 3, 2, 0); DEFINE_TAG(1, 3, 2, 1); DEFINE_TAG(1, 3, 2, 2); DEFINE_TAG(1, 3, 2, 3);
     DEFINE_TAG(1, 3, 3, 0); DEFINE_TAG(1, 3, 3, 1); DEFINE_TAG(1, 3, 3, 2); DEFINE_TAG(1, 3, 3, 3);
     DEFINE_TAG(2, 0, 0, 0); DEFINE_TAG(2, 0, 0, 1); DEFINE_TAG(2, 0, 0, 2); DEFINE_TAG(2, 0, 0, 3);
     DEFINE_TAG(2, 0, 1, 0); DEFINE_TAG(2, 0, 1, 1); DEFINE_TAG(2, 0, 1, 2); DEFINE_TAG(2, 0, 1, 3);
@@ -609,6 +610,10 @@ namespace math
     template<typename T, std::size_t N, std::size_t... Swizzles> requires ((Swizzles < N) && ...)
     constexpr CPU_GPU auto swizzle(const vector<T, N>& vec, swizzle_tag<Swizzles...>) -> swizzle_vector<T, N, Swizzles...>;
 
+    // getters
+    template<std::size_t N, vector_like Vec>
+    constexpr decltype(auto) get(Vec&& v);
+
     // functions
     template<vector_like Vector0, vector_like Vector1> requires (std::remove_cvref_t<Vector0>::size == std::remove_cvref_t<Vector1>::size) && requires(typename std::remove_cvref_t<Vector0>::value_type a, typename std::remove_cvref_t<Vector1>::value_type b) { a == b; }
     constexpr CPU_GPU bool operator==(const Vector0& v0, const Vector1& v1);
@@ -686,6 +691,56 @@ namespace math
     template<vector_like Vector> requires (std::remove_cvref_t<Vector>::size == 3) && std::is_arithmetic_v<typename std::remove_cvref_t<Vector>::value_type>
     constexpr CPU_GPU auto coordinate_system(const Vector& v);
 
+    template<typename T>
+    struct coordinate_system_trait;
+
+    template<std::size_t N> struct cartesian_coordinate {};
+    template<std::size_t N>
+    struct coordinate_system_trait<cartesian_coordinate<N>>
+    {
+        constexpr static std::size_t dimension = N;
+    };
+
+    struct polar_cooordinate {};
+    template<>
+    struct coordinate_system_trait<polar_cooordinate>
+    {
+        constexpr static std::size_t dimension = 2;
+    };
+
+    struct spherical_coordinate {};
+    template<>
+    struct coordinate_system_trait<spherical_coordinate>
+    {
+        constexpr static std::size_t dimension = 3;
+    };
+
+    struct cylindrical_coordinate {};
+    template<>
+    struct coordinate_system_trait<cylindrical_coordinate>
+    {
+        constexpr static std::size_t dimension = 3;
+    };
+
+    template<typename T>
+    concept coordinate_system_type = requires()
+    {
+        typename coordinate_system_trait<T>;
+        { coordinate_system_trait<T>::dimension } -> std::same_as<const std::size_t&>;
+    };
+
+    template<coordinate_system_type From, coordinate_system_type To, std::floating_point T>
+    constexpr CPU_GPU vector<T, coordinate_system_trait<To>::dimension> coordinate_cast(const vector<T, coordinate_system_trait<From>::dimension>& value) requires (coordinate_system_trait<To>::dimension == coordinate_system_trait<From>::dimension);
+
+}
+
+namespace std
+{
+    template<std::size_t N, math::vector_like Vector>
+    struct tuple_element<N, Vector> : public std::type_identity<typename Vector::value_type> {};
+
+    template<math::vector_like Vector>
+    struct tuple_size<Vector> : public std::integral_constant<std::size_t, Vector::size> {};
 }
 
 #include "impl/vec_base.inl"

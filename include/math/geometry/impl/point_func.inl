@@ -1,7 +1,7 @@
 #ifndef GPU_RAYTRACE_POINT_FUNC_INL
 #define GPU_RAYTRACE_POINT_FUNC_INL
 
-#include "math/linalg/point.hpp"
+#include "math/geometry/point.hpp"
 
 namespace math
 {
@@ -37,6 +37,18 @@ namespace math
 
     }
 
+    template<std::size_t I, typename T, std::size_t N>
+    constexpr CPU_GPU auto get(point<T, N>& pt)
+    {
+        return pt[I];
+    }
+
+    template<std::size_t I, typename T, std::size_t N>
+    constexpr CPU_GPU auto get(const point<T, N>& pt)
+    {
+        return pt[I];
+    }
+
     template<typename T, std::size_t N, vector_like Vector>
     constexpr CPU_GPU auto operator+(const point<T, N>& pt, const Vector& vec) requires (N <= std::remove_cvref_t<Vector>::size && std::is_same_v<typename std::remove_cvref_t<Vector>::value_type, T>)
     {
@@ -55,6 +67,11 @@ namespace math
         return impl::point_point_sub<point<T, N0>, point<T, N1>>(pt0, pt1, std::make_index_sequence<N0>{});
     }
 
+    template<typename T, typename U, std::size_t N>
+    constexpr CPU_GPU auto distance(const point<T, N>& pt0, const point<U, N>& pt1)
+    {
+        return magnitude(pt1 - pt0);
+    }
 }
 
 #endif //GPU_RAYTRACE_POINT_FUNC_INL

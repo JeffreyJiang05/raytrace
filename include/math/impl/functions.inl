@@ -141,6 +141,68 @@ namespace math
         return arctan<Iterations>(1 / ratio);
     }
 
+    // x in (0, 2]
+    template<std::size_t Iterations, std::floating_point T>
+    constexpr CPU_GPU T bounded_log(T x)
+    {
+        T n = 0;
+        T diff = x - 1, delta = diff;
+        for (std::size_t i = 1; i < Iterations; ++i)
+        {
+            n += delta;
+            delta *= -diff * i / (i + 1);
+        }
+        return n;
+    }
+
+    template<std::size_t Iterations, std::floating_point T>
+    constexpr CPU_GPU T log(T x)
+    {
+        if (std::is_constant_evaluated())
+        {
+            if (x <= 0) return INFINITY;
+            if (x <= 2) return bounded_log<Iterations>(x);
+            else
+            {
+                auto exponent = exponent_bits(x) - (1l << (exponent_size<T> - 1)) + 1;
+                return bounded_log<Iterations>(x / (1l << exponent)) + exponent * ln2<T>;
+            }
+        }
+        return std::log(x);
+    }
+
+    template<std::size_t Iterations, std::floating_point T>
+    constexpr CPU_GPU T exp(T x)
+    {
+        if (std::is_constant_evaluated())
+        {
+            T val = x < 0 ? -x : x;
+            T n = 0;
+            T delta = 1;
+            for (std::size_t i = 0; i < Iterations; ++i)
+            {
+                n += delta;
+                delta *= val / (i + 1);
+            }
+            return x < 0 ? 1 / n : n;
+        }
+        return std::exp(x);
+    }
+
+    template<std::size_t Iterations, std::floating_point T>
+    constexpr CPU_GPU T pow(T a, T b)
+    {
+        if (std::is_constant_evaluated())
+        {
+            if (b < 0)
+            {
+                return 1 / exp<Iterations>(-b * log<Iterations>(a));
+            }
+            else return exp<Iterations>(b * log<Iterations>(a));
+        }
+        return std::pow(a, b);
+    }
+
     template<arithmetic T>
     constexpr CPU_GPU T copysign(T value, T sign)
     {
@@ -150,6 +212,17 @@ namespace math
             return value;
         }
         return std::copysign(value, sign);
+    }
+
+    template<std::size_t Iterations, std::floating_point T>
+    constexpr CPU_GPU T arctan2(T y, T x)
+    {
+        if (x > 0) return arctan<Iterations>(y / x);
+        else if (x < 0 && y >= 0) return arctan<Iterations>(y / x) + pi<T>;
+        else if (x < 0 && y < 0) return arctan<Iterations>(y / x) - pi<T>;
+        else if (x == 0 && y > 0) return pi<T> / 2;
+        else if (x == 0 && y < 0) return -pi<T> / 2;
+        else return static_cast<T>(NAN);
     }
 
 }

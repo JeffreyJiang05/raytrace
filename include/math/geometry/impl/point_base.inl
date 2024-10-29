@@ -1,7 +1,7 @@
 #ifndef GPU_RAYTRACE_POINT_BASE_INL
 #define GPU_RAYTRACE_POINT_BASE_INL
 
-#include "math/linalg/point.hpp"
+#include "math/geometry/point.hpp"
 
 namespace math
 {

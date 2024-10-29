@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 #include <fmt/core.h>
 
-#include "math/linalg/point.hpp"
-#include "math/linalg/fmt.hpp"
+#include "math/geometry/point.hpp"
+#include "math/geometry/fmt.hpp"
 
 TEST(point, instantiation_indexing)
 {
@@ -26,10 +26,11 @@ TEST(point, instantiation_indexing)
     ASSERT_FLOAT_EQ(pt4f0[3], 3);
 
     point4f pt4f1;
-    ASSERT_FLOAT_EQ(pt4f1[0], 0);
-    ASSERT_FLOAT_EQ(pt4f1[1], 0);
-    ASSERT_FLOAT_EQ(pt4f1[2], 0);
-    ASSERT_FLOAT_EQ(pt4f1[3], 0);
+    auto [a, b, c, d] = pt4f1;
+    ASSERT_FLOAT_EQ(a, 0);
+    ASSERT_FLOAT_EQ(b, 0);
+    ASSERT_FLOAT_EQ(c, 0);
+    ASSERT_FLOAT_EQ(d, 0);
 }
 
 TEST(point, operations)

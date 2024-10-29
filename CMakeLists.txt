@@ -36,12 +36,12 @@ add_executable(ffmpeg_encap
         include/math/floats.hpp
         include/math/impl/floats.inl
         include/math/impl/sampling.inl
-        include/math/linalg/vec.hpp
-        include/math/linalg/impl/swizzle_vec.inl
-        include/math/linalg/impl/vec_base.inl
-        include/math/linalg/impl/vec.inl
-        include/math/linalg/fmt.hpp
-        include/math/linalg/impl/vec_func.inl
+        include/math/geometry/vec.hpp
+        include/math/geometry/impl/swizzle_vec.inl
+        include/math/geometry/impl/vec_base.inl
+        include/math/geometry/impl/vec.inl
+        include/math/geometry/fmt.hpp
+        include/math/geometry/impl/vec_func.inl
         include/math/functions.hpp)
 
 add_executable(float_test
@@ -56,14 +56,15 @@ add_executable(vec_test
         include/math/floats.hpp
         include/math/impl/floats.inl
         include/math/impl/sampling.inl
-        include/math/linalg/vec.hpp
-        include/math/linalg/impl/swizzle_vec.inl
-        include/math/linalg/impl/vec_base.inl
-        include/math/linalg/impl/vec.inl
-        include/math/linalg/impl/vec_func.inl
-        include/math/linalg/fmt.hpp
+        include/math/geometry/vec.hpp
+        include/math/geometry/impl/swizzle_vec.inl
+        include/math/geometry/impl/vec_base.inl
+        include/math/geometry/impl/vec.inl
+        include/math/geometry/impl/vec_func.inl
+        include/math/geometry/fmt.hpp
         include/math/functions.hpp
-        include/math/impl/functions.inl)
+        include/math/impl/functions.inl
+        include/math/geometry/impl/normal.inl)
 target_link_libraries(vec_test GTest::gtest GTest::gtest_main GTest::gmock GTest::gmock_main)
 
 add_executable(cuda_test src/prog/cuda_test.cu
@@ -71,31 +72,39 @@ add_executable(cuda_test src/prog/cuda_test.cu
         include/math/floats.hpp
         include/math/impl/floats.inl
         include/math/impl/sampling.inl
-        include/math/linalg/vec.hpp
-        include/math/linalg/impl/swizzle_vec.inl
-        include/math/linalg/impl/vec_base.inl
-        include/math/linalg/impl/vec.inl
-        include/math/linalg/impl/vec_func.inl
-        include/math/linalg/fmt.hpp
+        include/math/geometry/vec.hpp
+        include/math/geometry/impl/swizzle_vec.inl
+        include/math/geometry/impl/vec_base.inl
+        include/math/geometry/impl/vec.inl
+        include/math/geometry/impl/vec_func.inl
+        include/math/geometry/fmt.hpp
         include/math/functions.hpp
         include/math/impl/functions.inl
         include/gpu/gpu.hpp
-        include/math/linalg/point.hpp
-        include/math/linalg/impl/point_base.inl
-        include/math/linalg/impl/point.inl
-        include/math/linalg/impl/point_func.inl)
+        include/math/geometry/point.hpp
+        include/math/geometry/impl/point_base.inl
+        include/math/geometry/impl/point.inl
+        include/math/geometry/impl/point_func.inl
+        include/math/geometry/ray.hpp
+        include/math/geometry/normal.hpp
+        include/math/geometry/impl/normal.inl
+        include/math/geometry/impl/ray.inl)
 
 add_executable(point_test
         src/test/point_test.cpp
-        include/math/linalg/vec.hpp
-        include/math/linalg/impl/swizzle_vec.inl
-        include/math/linalg/impl/vec_base.inl
-        include/math/linalg/impl/vec.inl
-        include/math/linalg/impl/vec_func.inl
-        include/math/linalg/fmt.hpp
-        include/math/linalg/point.hpp
-        include/math/linalg/impl/point_base.inl
-        include/math/linalg/impl/point.inl
-        include/math/linalg/impl/point_func.inl
+        include/math/geometry/vec.hpp
+        include/math/geometry/impl/swizzle_vec.inl
+        include/math/geometry/impl/vec_base.inl
+        include/math/geometry/impl/vec.inl
+        include/math/geometry/impl/vec_func.inl
+        include/math/geometry/fmt.hpp
+        include/math/geometry/point.hpp
+        include/math/geometry/impl/point_base.inl
+        include/math/geometry/impl/point.inl
+        include/math/geometry/impl/point_func.inl
+        include/math/geometry/ray.hpp
+        include/math/geometry/normal.hpp
+        include/math/geometry/impl/ray.inl
+        include/math/geometry/impl/normal.inl
 )
 target_link_libraries(point_test GTest::gtest GTest::gtest_main GTest::gmock GTest::gmock_main)

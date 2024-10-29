@@ -5,6 +5,7 @@
 #include <span>
 
 #include "gpu/gpu.hpp"
+#include "math/linalg/point.hpp"
 
 namespace math::sampling
 {
@@ -30,7 +31,7 @@ namespace math::sampling
      * @return probability at x
      */
     template<std::floating_point T>
-    constexpr CPU_GPU T linear_pdf(T x, T a, T b);
+    constexpr CPU_GPU T linear_pdf(T u, T a, T b);
 
     /**
      * performs a continuous sampling based on a linear probability density function
@@ -53,7 +54,34 @@ namespace math::sampling
      * @return the value mapping to x in the range [0,1)
      */
     template<std::floating_point T>
-    constexpr CPU_GPU T invert_sample_linear(T x, T a, T b);
+    constexpr CPU_GPU T invert_sample_linear(T u, T a, T b);
+
+    /**
+     * performs a uniform sample from a disk with radius of 1.
+     * @tparam T floating point type
+     * @param u vector of two with sampled values in interval [0, 1]
+     * @return the polar coordinates (r, theta) of the sampled area
+     */
+    template<std::floating_point T>
+    constexpr CPU_GPU point<T, 2> sample_disk(point<T, 2> u);
+
+    /**
+     * performs a uniform sample from the surface of a sphere with radius of 1
+     * @tparam T floating point type
+     * @param u vector of two with sampled values in interval [0, 1)
+     * @return the spherical coordinates (r, theta, phi) of the sampled surface
+     */
+    template<std::floating_point T>
+    constexpr CPU_GPU point<T, 3> sample_sphere_surface(point<T, 2> u);
+
+    /**
+     * performs a uniform sample from the volume of a sphere with radius of 1
+     * @tparam T floating point type
+     * @param u vector of three with sampled values in interval [0, 1)
+     * @return the spherical coordinates (r, theta, phi) of the sampled volume
+     */
+    template<std::floating_point T>
+    constexpr CPU_GPU point<T, 3> sample_sphere(point<T, 3> u);
 
 }
 
